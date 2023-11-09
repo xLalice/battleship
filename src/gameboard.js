@@ -14,11 +14,17 @@ class Gameboard {
 
         ship.position = [];
         if (isHorizontal) {
+            if (ship.length + startCol > 9){
+                return;
+            }
             for (let i = 0; i < ship.length; i++) {
                 this.board[startRow][startCol + i] = ship;
                 ship.position.push({ row: startRow, col: startCol + i });
             }
         } else {
+            if (ship.length + startRow > 9){
+                return;
+            }
             for (let i = 0; i < ship.length; i++) {
                 this.board[startRow + i][startCol] = ship;
                 ship.position.push({ row: startRow + i, col: startCol });
