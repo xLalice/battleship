@@ -7,30 +7,54 @@ class Gameboard {
         this.missedAttacks = [];
     }
 
-    placeShip(ship, startRow, startCol, isHorizontal) {
-        if (startRow < 0 || startRow > 9 || startCol < 0 || startCol > 9) {
-            return;
+    checkForCollision(length, startRow, startCol, isHorizontal){
+        if (isHorizontal){
+            for (let i = 0; i < length; i++){
+                if (this.board[startRow][startCol + i] !== null){
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            for (let i = 0; i < length; i++){
+                if (this.board[startRow + i][startCol] !== null){
+                    return true;
+                }
+            }
+            return false;
         }
+    }
 
+    placeShip(ship, startRow, startCol, isHorizontal) {
+        if ((startRow < 0 || startRow > 9 || startCol < 0 || startCol > 9) 
+                && this.checkForCollision(ship.length, startRow, startCol, isHorizontal)) {
+            return null;
+        }
+        
         ship.position = [];
         if (isHorizontal) {
             if (ship.length + startCol > 9){
-                return;
+                return null;
             }
             for (let i = 0; i < ship.length; i++) {
+                if (this.board[startRow][startCol+i] !== null){
+                    return null;
+                }
                 this.board[startRow][startCol + i] = ship;
                 ship.position.push({ row: startRow, col: startCol + i });
             }
         } else {
             if (ship.length + startRow > 9){
-                return;
+                return null;
             }
             for (let i = 0; i < ship.length; i++) {
+                if (this.board[startRow+ i][startCol] !== null){
+                    return null;
+                }
                 this.board[startRow + i][startCol] = ship;
                 ship.position.push({ row: startRow + i, col: startCol });
             }
         }
-
         this.ships.push(ship);
     }
 
@@ -41,6 +65,7 @@ class Gameboard {
             target.hit();
             this.board[row][col] = 'X'; 
         } else {
+            this.board[row][col] = 'O';
             this.missedAttacks.push([row, col]);
         }
     }
@@ -51,6 +76,10 @@ class Gameboard {
 
     getMissedAttacks() {
         return this.missedAttacks;
+    }
+
+    getBoard(){
+        console.table(this.board);
     }
 }
 
