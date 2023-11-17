@@ -7,27 +7,52 @@ class Gameboard {
         this.missedAttacks = [];
     }
 
-    checkForCollision(length, startRow, startCol, isHorizontal){
-        if (isHorizontal){
-            for (let i = 0; i < length; i++){
-                if (this.board[startRow][startCol + i] !== null){
-                    return true;
-                }
+    checkForCollision(ship, row, col, isHorizontal, board) {
+    const numRows = board.length;
+    const numCols = board[0].length;
+
+    if (isHorizontal) {
+        // Check if ship goes out of bounds horizontally
+        if (col + ship.length > numCols) {
+            return true;
+        }
+
+        for (let i = col; i < col + ship.length; i++) {
+            console.log(`Checking cell[${row}][${i}]: ${board[row][i]}`);
+            if (board[row][i] !== null) {
+                console.log(true);
+                return true;
             }
-            return false;
-        } else {
-            for (let i = 0; i < length; i++){
-                if (this.board[startRow + i][startCol] !== null){
-                    return true;
-                }
+        }
+    } else {
+        // Check if ship goes out of bounds vertically
+        if (row + ship.length > numRows) {
+            return true;
+        }
+
+        for (let i = row; i < row + ship.length; i++) {
+            console.log(`Checking cell[${i}][${col}]: ${board[i][col]}`);
+            if (board[i][col] !== null) {
+                console.log(true);
+                return true;
             }
-            return false;
         }
     }
 
+    console.log(false);
+    return false;
+}
+
+    
+
+
+
     placeShip(ship, startRow, startCol, isHorizontal) {
-        if ((startRow < 0 || startRow > 9 || startCol < 0 || startCol > 9) 
-                && this.checkForCollision(ship.length, startRow, startCol, isHorizontal)) {
+        if (startRow < 0 || startRow > 9 || startCol < 0 || startCol > 9) {
+            return null;
+        }
+
+        if (this.checkForCollision(ship, startRow, startCol, isHorizontal, this.board)){
             return null;
         }
         
@@ -57,6 +82,7 @@ class Gameboard {
         }
         this.ships.push(ship);
     }
+    
 
     receiveAttack(row, col) {
         const target = this.board[row][col];
