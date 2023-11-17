@@ -8,40 +8,38 @@ class Gameboard {
     }
 
     checkForCollision(ship, row, col, isHorizontal, board) {
-    const numRows = board.length;
-    const numCols = board[0].length;
+        const numRows = board.length;
+        const numCols = board[0].length;
 
-    if (isHorizontal) {
-        // Check if ship goes out of bounds horizontally
-        if (col + ship.length > numCols) {
-            return true;
-        }
-
-        for (let i = col; i < col + ship.length; i++) {
-            console.log(`Checking cell[${row}][${i}]: ${board[row][i]}`);
-            if (board[row][i] !== null) {
-                console.log(true);
+        if (isHorizontal) {
+            if (col + ship.length > numCols) {
                 return true;
             }
-        }
-    } else {
-        // Check if ship goes out of bounds vertically
-        if (row + ship.length > numRows) {
-            return true;
-        }
 
-        for (let i = row; i < row + ship.length; i++) {
-            console.log(`Checking cell[${i}][${col}]: ${board[i][col]}`);
-            if (board[i][col] !== null) {
-                console.log(true);
+            for (let i = col; i < col + ship.length; i++) {
+                console.log(`Checking cell[${row}][${i}]: ${board[row][i]}`);
+                if (board[row][i] !== null) {
+                    console.log(true);
+                    return true;
+                }
+            }
+        } else {
+            if (row + ship.length > numRows) {
                 return true;
             }
+
+            for (let i = row; i < row + ship.length; i++) {
+                console.log(`Checking cell[${i}][${col}]: ${board[i][col]}`);
+                if (board[i][col] !== null) {
+                    console.log(true);
+                    return true;
+                }
+            }
         }
+
+        console.log(false);
+        return false;
     }
-
-    console.log(false);
-    return false;
-}
 
     
 
@@ -58,7 +56,7 @@ class Gameboard {
         
         ship.position = [];
         if (isHorizontal) {
-            if (ship.length + startCol > 9){
+            if (ship.length + startCol - 1 > 9){
                 return null;
             }
             for (let i = 0; i < ship.length; i++) {
@@ -69,7 +67,7 @@ class Gameboard {
                 ship.position.push({ row: startRow, col: startCol + i });
             }
         } else {
-            if (ship.length + startRow > 9){
+            if (ship.length + startRow - 1 > 9){
                 return null;
             }
             for (let i = 0; i < ship.length; i++) {
