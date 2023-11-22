@@ -22,21 +22,16 @@ export function gameLoop(){
 function handleCellClick(event, currentPlayer, opponentPlayer) {
     event.stopPropagation();
     const clickedCell = event.target;
-    console.log('Current Player:', currentPlayer);
     const row = parseInt(clickedCell.dataset.row);
     const col = parseInt(clickedCell.dataset.col);
-    console.log('Event Target:', clickedCell);
 
     if (clickedCell.classList.contains('clicked')) {
-        console.log('Cell already clicked. Choose another cell.');
         return;
     }
     clickedCell.classList.add("clicked");
-    console.log(row, col, opponentPlayer);
     currentPlayer.makeMove(row, col, opponentPlayer);
     opponentPlayer.makeRandomMove(currentPlayer.gameboard);
 
-    console.log(currentPlayer.gameboard.board);
     if (gameOver(currentPlayer, opponentPlayer)) {
         announceWinner(currentPlayer, opponentPlayer);
         clearContent();

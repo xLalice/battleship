@@ -17,9 +17,7 @@ class Gameboard {
             }
 
             for (let i = col; i < col + ship.length; i++) {
-                console.log(`Checking cell[${row}][${i}]: ${board[row][i]}`);
                 if (board[row][i] !== null) {
-                    console.log(true);
                     return true;
                 }
             }
@@ -29,15 +27,11 @@ class Gameboard {
             }
 
             for (let i = row; i < row + ship.length; i++) {
-                console.log(`Checking cell[${i}][${col}]: ${board[i][col]}`);
                 if (board[i][col] !== null) {
-                    console.log(true);
                     return true;
                 }
             }
         }
-
-        console.log(false);
         return false;
     }
 

@@ -9,7 +9,6 @@ class Player {
     }
 
     makeMove(x, y, opponent){
-        console.log(x, y, opponent)
         opponent.gameboard.receiveAttack(x, y);
     }
 
@@ -33,7 +32,6 @@ class Player {
             let isHorizontal = Math.random() < 0.5;
     
             let ship = new Ship(initialShipLengths[i]);
-            console.log(ship.length, x , y, isHorizontal)
             let placed = this.gameboard.placeShip(ship, x, y, isHorizontal);
             if (placed === null) {
                 i--;
