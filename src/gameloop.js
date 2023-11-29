@@ -1,6 +1,6 @@
 import Player from "./player";
 import Gameboard from "./gameboard";
-import { clearContent } from "./view";
+import { clearContent, renderBoards, winner } from "./view";
 
 export function gameLoop(){
     const player1 = new Player("Human", new Gameboard());
@@ -15,6 +15,10 @@ export function gameLoop(){
         if (event.target.classList.contains('box')) {
             handleCellClick(event, player1, player2);
             renderBoards(player1, player2);
+        } 
+        if (gameOver(player1, player2)) {
+            clearContent();
+            announceWinner(player1, player2);
         }
     });
 }
@@ -31,13 +35,7 @@ function handleCellClick(event, currentPlayer, opponentPlayer) {
     clickedCell.classList.add("clicked");
     currentPlayer.makeMove(row, col, opponentPlayer);
     opponentPlayer.makeRandomMove(currentPlayer.gameboard);
-
-    if (gameOver(currentPlayer, opponentPlayer)) {
-        announceWinner(currentPlayer, opponentPlayer);
-        clearContent();
-    }
 }
-
 
 
 function gameOver(player1, player2){
@@ -49,88 +47,8 @@ function gameOver(player1, player2){
 
 function announceWinner(player1, player2){
     if (player1.allShipsSunk()){
-        console.log(`${player2.name} wins!`)
+        winner(player2.name);
     } else{
-        console.log(`${player1.name} wins!`)
+        winner(player1.name);
     }
-}
-
-function renderPlayerBoard(player){
-    const parent = document.querySelector("#content")
-    const board = player.gameboard.board;
-    let boardDiv = parent.querySelector("#player-board");
-
-    if (!boardDiv) {
-        boardDiv = document.createElement("div");
-        boardDiv.classList.add("board");
-        boardDiv.id = "player-board";
-        parent.appendChild(boardDiv);
-    }
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            let box = boardDiv.querySelector(`.box[data-row="${i}"][data-col="${j}"]`);
-            if (!box) {
-                box = document.createElement("div");
-                box.classList.add("box");
-                box.dataset.row = i;
-                box.dataset.col = j;
-                boardDiv.appendChild(box);
-            }
-
-            box.className = "box";
-            if (board[i][j] === null) {
-                box.classList.add("null");
-            } else if (board[i][j] === "O") {
-                box.classList.add("water");
-            } else if (board[i][j] === "X") {
-                box.classList.add("hit");
-            } else {
-                box.classList.add("ship");
-            }
-        }
-    }
-}
-
-function renderComputerBoard(player) {
-    const parent = document.querySelector("#content");
-    const board = player.gameboard.board;
-
-    // Check if the computer board element already exists
-    let boardDiv = parent.querySelector("#computer-board");
-
-    // If not, create the board element
-    if (!boardDiv) {
-        boardDiv = document.createElement("div");
-        boardDiv.classList.add("board");
-        boardDiv.id = "computer-board";
-        parent.appendChild(boardDiv);
-    }
-
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            let box = boardDiv.querySelector(`.box[data-row="${i}"][data-col="${j}"]`);
-            if (!box) {
-                box = document.createElement("div");
-                box.classList.add("box");
-                box.dataset.row = i;
-                box.dataset.col = j;
-                boardDiv.appendChild(box);
-            }
-
-            box.className = "box";
-            if (board[i][j] === null) {
-                box.classList.add("null");
-            } else if (board[i][j] === "O") {
-                box.classList.add("water");
-            } else if (board[i][j] === "X") {
-                box.classList.add("hit");
-            }
-        }
-    }
-}
-
-
-function renderBoards(human, computer) {
-    renderPlayerBoard(human);
-    renderComputerBoard(computer);
 }

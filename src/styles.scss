@@ -127,7 +127,6 @@ body {
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 	grid-template-rows: repeat(10, 1fr);
-	gap: 5px; 
   }
 
 .box {
@@ -156,4 +155,23 @@ body {
 
 .clicked {
 	background-color: white;
+}
+
+.winner-div {
+	color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 25px;
+
+	& > h1 {
+		font-size: 5rem;
+	}
+
+	& > button {
+		padding: 5px;
+		border-radius: 10px;
+		font-weight: bold;
+		font-size: 2rem;
+	}
 }
